@@ -207,6 +207,10 @@ static IMP WKOriginalImp;
 
 - (void)scrollViewDidScroll:(UIScrollView*)scrollView
 {
+    if (_disableScrollValue) {
+        [scrollView setContentOffset:CGPointZero animated:NO];
+        return;
+    }
     if (_shrinkView && _keyboardIsVisible) {
         CGFloat maxY = scrollView.contentSize.height - scrollView.bounds.size.height;
         if (scrollView.bounds.origin.y > maxY) {
@@ -266,6 +270,26 @@ static IMP WKOriginalImp;
 - (void)hide:(CDVInvokedUrlCommand*)command
 {
     [self.webView endEditing:YES];
+}
+
+- (void)disableScroll:(CDVInvokedUrlCommand*)command
+{
+    BOOL disable = NO;
+    if (command.arguments.count > 0) {
+        id value = [command.arguments objectAtIndex:0];
+        if ([value isKindOfClass:[NSNumber class]]) {
+            disable = [value boolValue];
+        }
+    }
+
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (disable != self.disableScrollValue) {
+            self.webView.scrollView.scrollEnabled = !disable;
+            self.disableScrollValue = disable;
+        }
+        [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK]
+                                    callbackId:command.callbackId];
+    });
 }
 
 #pragma mark dealloc

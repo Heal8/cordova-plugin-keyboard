@@ -29,11 +29,13 @@
 @property (readwrite, assign, nonatomic) BOOL shrinkView;
 @property (readwrite, assign, nonatomic) BOOL disableScrollingInShrinkView;
 @property (readwrite, assign, nonatomic) BOOL hideFormAccessoryBar;
+@property (readwrite, assign, nonatomic) BOOL disableScrollValue;
 @property (readonly, assign, nonatomic) BOOL keyboardIsVisible;
 
 - (void)shrinkView:(CDVInvokedUrlCommand*)command;
 - (void)disableScrollingInShrinkView:(CDVInvokedUrlCommand*)command;
 - (void)hideFormAccessoryBar:(CDVInvokedUrlCommand*)command;
 - (void)hide:(CDVInvokedUrlCommand*)command;
+- (void)disableScroll:(CDVInvokedUrlCommand*)command;
 
 @end
